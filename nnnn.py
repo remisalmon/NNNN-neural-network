@@ -20,11 +20,6 @@
 
 import numpy as np
 
-# notation: x and y = input/output (d, 1) vectors; X and Y = input/output (d, n) matrices
-#           d = nb_dimensions; n = nb_samples
-# in df_cost: for the stochastic gradient descent, the sum() in f is removed and only (y_hat, y) are used instead of the whole training sample (Y_hat, Y)
-#             for the batch gradient descent, multiply df by (1/n) and add all (dw, db) before updating (w, b)
-
 def f_activation(x): # activation function (sigmoid)
     f = 1.0/(1.0+np.exp(-x))
 
@@ -48,9 +43,9 @@ def f_accuracy(Y_hat, Y): # compute nnnn accuracy
     n = Y.shape[1]
 
     for i in range(n):
-        if np.all((Y_hat[:, i] > 0.5)*1 == Y[:, i]): # binarise y_hat and compare to y
+        if np.all((Y_hat[:, i] > 0.5)*1 == Y[:, i]):
                 a = a+1
-    a = a/n # average over all training samples
+    a = a/n
 
     return(a)
 
@@ -102,14 +97,14 @@ def nnnn_grad(x, y, w, b, nnnn_structure): # compute nnnn output + weights and b
     return(y_hat, dw, db)
 
 def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure): # train nnnn with X = [nb_dimensions, nb_samples] Y = [nb_classes, nb_samples], nnnn_structure = [size_layer1, ...]
-    Y_hat = np.zeros(Y.shape) # network output
+    Y_hat = np.zeros(Y.shape)
 
     accuracy_hist = np.zeros(iterations)
 
-    n = Y.shape[1] # number of training samples
+    n = Y.shape[1]
 
     for i in range(iterations):
-        for j in np.random.permutation(n): # stochastic gradient descent
+        for j in np.random.permutation(n):
             x = X[:, j].reshape((-1, 1)) # because NumPy
             y = Y[:, j].reshape((-1, 1)) # because NumPy
 
@@ -123,6 +118,6 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure): # train nnnn with
 
         accuracy_hist[i] = f_accuracy(Y_hat, Y)
 
-        print('iter '+'%03d'%(i+1)+'/'+str(iter)+', accuracy = '+str(accuracy_hist[i]))
+        print('iter '+'%03d'%(i+1)+'/'+str(iterations)+', accuracy = '+str(accuracy_hist[i]))
 
     return(w, b, accuracy_hist)
