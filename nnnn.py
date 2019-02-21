@@ -20,25 +20,27 @@
 
 import numpy as np
 
-def f_activation(x): # activation function (sigmoid)
-    f = 1.0/(1.0+np.exp(-x))
+def sigmoid(x):
+    return(1/(1+np.exp(-x)))
 
-    return(f)
+def d_sigmoid(x):
+    f = sigmoid(x)
+    return(f*(1-f))
 
-def df_activation(x): # activation function derivate (sigmoid)
-    f = f_activation(x)
-    df = f*(1.0-f)
+def relu(x):
+    return((x > 0)*x)
+
+def d_relu(x):
+    return((x > 0)*1.0)
+
+def d_cost(y_hat, y): # cost function derivate (MSE of Binary Cross-Entropy)
+    df = (y_hat-y) # Mean Square Error f = (1/n)*sum((1/2)*np.power(Y_hat-Y, 2))
+
+    #df = -(y/y_hat-(1-y)/(1-y_hat)) # Binary Cross-Entropy f = (1/n)*sum(-(Y*np.log(Y_hat)+(1-Y)*np.log(1-Y_hat)))
 
     return(df)
 
-def df_cost(y_hat, y): # cost function derivate (MSE of Binary Cross-Entropy)
-    #df = (y_hat-y) # Mean Square Error f = (1/n)*sum((1/2)*np.power(Y_hat-Y, 2))
-
-    df = -(y/y_hat-(1-y)/(1-y_hat)) # Binary Cross-Entropy f = (1/n)*sum(-(Y*np.log(Y_hat)+(1-Y)*np.log(1-Y_hat)))
-
-    return(df)
-
-def f_accuracy(Y_hat, Y): # compute nnnn accuracy
+def nnnn_accuracy(Y_hat, Y): # compute nnnn accuracy
     a = 0
     n = Y.shape[1]
 
@@ -54,8 +56,8 @@ def nnnn_init(nnnn_structure): # initialize nnnn weights and biases gradient mat
     b = {}
 
     for i in np.arange(1, len(nnnn_structure)):
-        w[i] = np.random.randn(nnnn_structure[i], nnnn_structure[i-1])
-        b[i] = np.random.randn(nnnn_structure[i], 1)
+        w[i] = np.random.randn(nnnn_structure[i]['layers'], nnnn_structure[i-1]['layers'])
+        b[i] = np.random.randn(nnnn_structure[i]['layers'], 1)
 
     return(w, b)
 
@@ -68,6 +70,8 @@ def nnnn_forward(x, w, b, nnnn_structure): # compute nnnn output
     a_hist[0] = a
 
     for i in np.arange(1, len(nnnn_structure)):
+        f_activation = nnnn_structure[i]['activation']
+
         z = np.dot(w[i], a)+b[i]
         a = f_activation(z)
 
@@ -86,8 +90,13 @@ def nnnn_grad(x, y, w, b, nnnn_structure): # compute nnnn output + weights and b
     db = {}
 
     for i in reversed(np.arange(1, len(nnnn_structure))):
+        if nnnn_structure[i]['activation'] == sigmoid:
+            df_activation = d_sigmoid
+        elif nnnn_structure[i]['activation'] == relu:
+            df_activation = d_relu
+
         if i == len(nnnn_structure)-1:
-            delta[i] = df_cost(y_hat, y)*df_activation(z_hist[i])
+            delta[i] = d_cost(y_hat, y)*df_activation(z_hist[i])
         else:
             delta[i] = np.dot(w[i+1].T, delta[i+1])*df_activation(z_hist[i])
 
@@ -116,8 +125,24 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure): # train nnnn with
 
             Y_hat[:, j] = y_hat.reshape((1, -1)) # because NumPy
 
-        accuracy_hist[i] = f_accuracy(Y_hat, Y)
+        accuracy_hist[i] = nnnn_accuracy(Y_hat, Y)
 
         print('iter '+'%03d'%(i+1)+'/'+str(iterations)+', accuracy = '+str(accuracy_hist[i]))
 
     return(w, b, accuracy_hist)
+
+def main():
+    # example
+    nnnn_structure = [
+    {'layers':2, 'activation':None}, # input layer (no activation)
+    {'layers':8, 'activation':relu},
+    {'layers':8, 'activation':relu},
+    {'layers':2, 'activation':sigmoid}, # output layer
+    ]
+
+    (w, b) = nnnn_init(nnnn_structure)
+
+    return
+
+if __name__ == '__main__':
+    main()
