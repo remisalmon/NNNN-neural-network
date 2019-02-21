@@ -2,13 +2,46 @@
 
 nnnn.py is a feed-forward neural network with stochastic gradient descent written in Python
 
-## Comments
+## Usage
 
-Notations:  
+### Initialization
+
+For a 4-layers network with ReLU hidden layers activation, sigmoid output layer activation and 2-d input and output:
+```
+nnnn_structure = [
+{'layers':2, 'activation':None}, # input layer (no activation)
+{'layers':8, 'activation':relu},
+{'layers':8, 'activation':relu},
+{'layers':8, 'activation':relu},
+{'layers':2, 'activation':sigmoid}, # output layer
+]
+
+(w, b) = nnnn_init(nnnn_structure)
+```
+### Training
+
+With input data `X` and output data `Y`, a gradient descent rate of `0.01` and `1000` interations of the gradient descent:
+
+```
+nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure)
+```
+
+### Testing
+
+With input data `X`:
+
+```
+Y_hat = nnnn_test(X, w, b, nnnn_structure)
+```
+
+## Data formatting
+
 * `x, y` are vectors of dimensions `(d, 1), (c, 1)`
 * `X, Y` are matrices of dimensions `(d, n), (c, n)`
 * `d` is the input data dimension, `c` is the number of classes, `n` is the number of training/testing samples
 * `y, Y` are training data and `y_hat, Y_hat` are network output data (same dimensions as `y, Y`)
+
+## Comments
 
 Remarks:
 * In `df_cost()`:  
