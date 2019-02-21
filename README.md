@@ -1,6 +1,11 @@
 # NNNN: a Nth NumPy Neural Network
 
-nnnn.py is a feed-forward neural network with stochastic gradient descent written in Python
+`nnnn.py` is a feed-forward neural network with stochastic gradient descent written in Python
+
+`nnnn.py` is also:  
+* Simple (125 lines of code)  
+* Customizable (available activation functions: ReLU, sigmoid; available cost functions: MSE, binary cross-entropy)  
+* Vectorized (not completely, the stochastic gradient descent can be vectorized...)
 
 ## Usage
 
