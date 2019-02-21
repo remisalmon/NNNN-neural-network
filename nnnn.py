@@ -36,7 +36,7 @@ def d_relu(x):
 def d_cost(y_hat, y): # cost function derivate (MSE of Binary Cross-Entropy)
     df = (y_hat-y) # Mean Square Error f = (1/n)*sum((1/2)*np.power(Y_hat-Y, 2))
 
-    #df = -(y/(y_hat+1e-9)-(1-y)/(1-y_hat+1e-9)) # Binary Cross-Entropy f = (1/n)*sum(-(Y*np.log(Y_hat)+(1-Y)*np.log(1-Y_hat)))
+    #df = (y_hat-y)/(y_hat*(1-y_hat+1e-9)) # Binary Cross-Entropy f = (1/n)*sum(-(Y*np.log(Y_hat)+(1-Y)*np.log(1-Y_hat)))
 
     return(df)
 
