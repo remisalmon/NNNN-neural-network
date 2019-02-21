@@ -131,6 +131,19 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure): # train nnnn with
 
     return(w, b, accuracy_hist)
 
+def nnnn_test(x, w, b, nnnn_structure): # compute nnnn output
+    a = x
+
+    for i in np.arange(1, len(nnnn_structure)):
+        f_activation = nnnn_structure[i]['activation']
+
+        z = np.dot(w[i], a)+b[i]
+        a = f_activation(z)
+
+    y_hat = a
+
+    return(y_hat)
+
 def main():
     # example
     nnnn_structure = [
