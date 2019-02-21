@@ -4,14 +4,13 @@
 
 `nnnn.py` is also:  
 * Simple (125 lines of code)  
-* Customizable (available activation functions: ReLU, sigmoid; available cost functions: MSE, binary cross-entropy)  
-* Vectorized (not completely, the stochastic gradient descent can be vectorized...)
+* Customizable (available activation functions: ReLU, Sigmoid; available cost functions: MSE, Binary Cross-Entropy)  
 
 ## Usage
 
 ### Initialization
 
-For a 4-layers network with ReLU hidden layers activation, sigmoid output layer activation and 2-d input and output:
+For a 5-layers network with ReLU hidden layers activation, sigmoid output layer activation and 2-d input and output:
 ```
 nnnn_structure = [
 {'layers':2, 'activation':None}, # input layer (no activation)
@@ -23,6 +22,7 @@ nnnn_structure = [
 
 (w, b) = nnnn_init(nnnn_structure)
 ```
+
 ### Training
 
 With input data `X` and output data `Y`, a gradient descent rate of `0.01` and `1000` interations of the gradient descent:
@@ -49,9 +49,9 @@ Y_hat = nnnn_test(X, w, b, nnnn_structure)
 ## Comments
 
 Remarks:
-* In `df_cost()`:  
-For the stochastic gradient descent, the sum in the cost function `f` is removed since only `y_hat, y` are evaluated instead of the whole training sample `Y_hat, Y` (default algorithm, no need to edit the code)  
-To use the batch gradient descent, multiply `df` by `(1/n)` and add up all `dw, db` before updating `w, b` and replace `np.random.permutation(n)` by `range(n)` (need to edit the code)
+* For the stochastic gradient descent, the sum in the cost function `f` is removed since only `y_hat, y` are evaluated instead of the whole training sample `Y_hat, Y` (default algorithm, no need to edit the code)
+* To use the batch gradient descent, multiply `df` by `(1/n)`, add up all `dw, db` before updating `w, b` and replace `np.random.permutation(n)` by `range(n)` (need to edit the code)
 
 References:
 * Backpropagation algorithm derivation in matrix form: https://sudeepraja.github.io/Neural/
+* Cross-Entropy Loss functions and derivations: https://gombru.github.io/2018/05/23/cross_entropy_loss/
