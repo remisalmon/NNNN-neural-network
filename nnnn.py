@@ -21,11 +21,11 @@
 import numpy as np
 
 def sigmoid(x):
-    return(1/(1+np.exp(-x)))
+    return(1.0/(1.0+np.exp(-x)))
 
 def d_sigmoid(x):
     f = sigmoid(x)
-    return(f*(1-f))
+    return(f*(1.0-f))
 
 def relu(x):
     return((x > 0)*x)
@@ -62,11 +62,10 @@ def nnnn_init(nnnn_structure): # initialize nnnn weights and biases gradient mat
     return(w, b)
 
 def nnnn_forward(x, w, b, nnnn_structure): # compute nnnn output
-    a = x
-
     z_hist = {}
     a_hist = {}
 
+    a = x
     a_hist[0] = a
 
     for i in np.arange(1, len(nnnn_structure)):
@@ -140,9 +139,9 @@ def nnnn_test(x, w, b, nnnn_structure): # compute nnnn output
         z = np.dot(w[i], a)+b[i]
         a = f_activation(z)
 
-    y_hat = a
+    y = a
 
-    return(y_hat)
+    return(y)
 
 def main():
     # example
