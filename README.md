@@ -7,7 +7,7 @@
 * Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softax (`softmax`)
 * Cost functions: Mean Square Error (`MSE`), Binary Cross-Entropy (`BCE`), Categorical Cross-Entropy (`CE`)
 * Optimization algorithm: Stochastic Gradient Descent (truly stochastic)
-* Only 142 LOC and 5KB
+* Only 143 LOC and 5 KB
 * Only requires NumPy
 
 ## Usage
@@ -15,7 +15,7 @@
 ### Initialization
 
 Example:  
-For a 4-layers network with ReLU hidden layers activations, Softmax output layer activation and 2-d inputs and outputs:
+For a 4-layers network with ReLU hidden layers, a Softmax output layer and 2-d inputs and outputs:
 
 ```
 nnnn_structure = [
