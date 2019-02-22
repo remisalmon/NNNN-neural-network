@@ -38,9 +38,9 @@ nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure)
 In the output layer, the following activation functions automatically default to the following cost functions:  
 `sigmoid` → `BCE`  
 `softmax` → `CE`  
-`relu   ` → `MSE`
+`relu` → `MSE`
 
-To use `MSE` with a `sigmoid` in the output layer, run:  
+To use `MSE` with `sigmoid` in the output layer, run:  
 ```
 nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure, cost = 'MSE')
 ```
