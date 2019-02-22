@@ -6,7 +6,7 @@
 
 * Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softax (`softmax`)
 * Cost functions: Mean Square Error (`MSE`), Binary Cross-Entropy (`BCE`), Categorical Cross-Entropy (`CE`)
-* True Stochastic Gradient Descent
+* Optimization algorithm: Stochastic Gradient Descent (truly stochastic)
 * Only 142 LOC and 5KB
 * Only requires NumPy
 
