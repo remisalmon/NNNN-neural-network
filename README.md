@@ -38,12 +38,12 @@ nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure)
 
 #### Note
 
-The following activation functions in the output automatically default to the following cost functions:  
+Setting the following activation functions in the output layer automatically default to the following cost functions:  
 `sigmoid` → `BCE`  
 `softmax` → `CE`  
 `relu` → `MSE`
 
-The cost functions `BCE` and `CE` require the training output data `Y` to be a set of one-hot vectors
+The cost functions `BCE` and `CE` require the training output data `Y` to be encoded as one-hot vectors
 
 To use the `MSE` cost function with a `sigmoid` activation function in the output layer, run:
 
@@ -73,5 +73,6 @@ Y_hat = nnnn_test(X, w, b, nnnn_structure)
 
 ## ToDo
 
+* Add regularization term
 * Implement batch/mini-batch gradient descent
 * Vectorize more
