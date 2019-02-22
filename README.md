@@ -4,7 +4,7 @@
 
 ## Features
 
-* Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softmax (`softmax`)
+* Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softax (`softmax`)
 * Cost functions: Mean Square Error (`MSE`), Binary Cross-Entropy (`BCE`), Categorical Cross-Entropy (`CE`)
 * True Stochastic Gradient Descent
 * 142 LOC, 5KB, only requires NumPy
@@ -14,7 +14,7 @@
 ### Initialization
 
 Example:  
-For a 4-layers network with ReLU hidden layers activations, softmax output layer activation and 2-d inputs and outputs:
+For a 4-layers network with ReLU hidden layers activations, Softmax output layer activation and 2-d inputs and outputs:
 ```
 nnnn_structure = [
 {'layers':2, 'activation':None}, # input layer (no activation)
@@ -36,9 +36,9 @@ nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure)
 #### Note
 
 In the output layer, the following activation functions automatically default to the following cost functions:  
-`sigmoid` → `BCE` 
+`sigmoid` → `BCE`  
 `softmax` → `CE`  
-`relu` → `MSE`
+`relu   ` → `MSE`
 
 To use `MSE` with a `sigmoid` in the output layer, run:  
 ```
