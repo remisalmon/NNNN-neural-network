@@ -74,10 +74,10 @@ def nnnn_forward(x, w, b, nnnn_structure): # compute nnnn output
     a_hist[0] = a
 
     for i in np.arange(1, len(nnnn_structure)):
-        f_activation = nnnn_structure[i]['activation']
+        activation = nnnn_structure[i]['activation']
 
         z = np.dot(w[i], a)+b[i]
-        a = f_activation(z)
+        a = activation(z)
 
         z_hist[i] = z
         a_hist[i] = a
@@ -95,10 +95,10 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
 
     for i in reversed(np.arange(1, len(nnnn_structure))):
         if nnnn_structure[i]['activation'] == sigmoid:
-            df_activation = d_sigmoid
+            d_activation = d_sigmoid
 
         elif nnnn_structure[i]['activation'] == relu:
-            df_activation = d_relu
+            d_activation = d_relu
 
         if i == len(nnnn_structure)-1:
             if nnnn_structure[i]['activation'] == softmax:
@@ -115,7 +115,7 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
                 delta[i] = d_cost_MSE(y_hat, y)*d_relu(z_hist[i])
 
         else:
-            delta[i] = np.dot(w[i+1].T, delta[i+1])*df_activation(z_hist[i])
+            delta[i] = np.dot(w[i+1].T, delta[i+1])*d_activation(z_hist[i])
 
         dw[i] = np.dot(delta[i], a_hist[i-1].T)
         db[i] = delta[i]
@@ -131,8 +131,8 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
 
     for i in range(iterations):
         for j in np.random.permutation(n):
-            x = X[:, j].reshape((-1, 1)) # because NumPy
-            y = Y[:, j].reshape((-1, 1)) # because NumPy
+            x = X[:, j].reshape((-1, 1)) # reshape because NumPy
+            y = Y[:, j].reshape((-1, 1)) # reshape because NumPy
 
             (y_hat, dw, db) = nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost)
 
@@ -140,7 +140,7 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
                 w[k] = w[k]-alpha*dw[k]
                 b[k] = b[k]-alpha*db[k]
 
-            Y_hat[:, j] = y_hat.reshape((1, -1)) # because NumPy
+            Y_hat[:, j] = y_hat.reshape((1, -1)) # reshape because NumPy
 
         accuracy_hist[i] = nnnn_accuracy(Y_hat, Y)
 
@@ -152,10 +152,10 @@ def nnnn_test(x, w, b, nnnn_structure): # compute nnnn output
     a = x
 
     for i in np.arange(1, len(nnnn_structure)):
-        f_activation = nnnn_structure[i]['activation']
+        activation = nnnn_structure[i]['activation']
 
         z = np.dot(w[i], a)+b[i]
-        a = f_activation(z)
+        a = activation(z)
 
     y = a
 
