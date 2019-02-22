@@ -34,16 +34,17 @@ def d_relu(x):
     return((x > 0)*1.0)
 
 def softmax(x):
+    x = x-x.max()
     return(np.exp(x)/(sum(np.exp(x))))
 
 def d_cost_MSE(y_hat, y):
-    return(y_hat-y) # df/dy_hat of f = cost(y_hat) = f/dy_hat = (1/2)*np.power(y_hat-y, 2)
+    return(y_hat-y) # df/dy_hat of f = MSE(y_hat) = (1/2)*np.power(y_hat-y, 2)
 
 def d_costactivation_sigmoid_BCE(y_hat, y):
-    return(y_hat-y) # df/dy_hat of f = cost(activation()) = BCE(sigmoid()), BCE = -(y*np.log(y_hat)+(1-y)*np.log(1-y_hat)))
+    return(y_hat-y) # df/dy_hat of f = BCE(sigmoid()) with BCE(y_hat) = -(y*np.log(y_hat)+(1-y)*np.log(1-y_hat)))
 
 def d_costactivation_softmax_CE(y_hat, y):
-    return(y_hat-y) # df/dy_hat of f = cost(activation()) = CE(softmax()), CE = -sum(y*np.log(y_hat)))
+    return(y_hat-y) # df/dy_hat of f = CE(softmax()) with CE(y_hat) = -sum(y*np.log(y_hat)))
 
 def nnnn_accuracy(Y_hat, Y): # compute nnnn accuracy
     a = 0
