@@ -33,12 +33,17 @@ def relu(x):
 def d_relu(x):
     return((x > 0)*1.0)
 
-def d_cost(y_hat, y): # cost function derivate (MSE of Binary Cross-Entropy)
-    df = (y_hat-y) # Mean Square Error f = (1/n)*sum((1/2)*np.power(Y_hat-Y, 2))
+def softmax(x):
+    return(np.exp(x)/(sum(np.exp(x))))
 
-    #df = (y_hat-y)/(y_hat*(1-y_hat+1e-9)) # Binary Cross-Entropy f = (1/n)*sum(-(Y*np.log(Y_hat)+(1-Y)*np.log(1-Y_hat)))
+def d_cost_MSE(y_hat, y):
+    return(y_hat-y) # df/dy_hat of f = cost(y_hat) = f/dy_hat = (1/2)*np.power(y_hat-y, 2)
 
-    return(df)
+def d_costactivation_sigmoid_BCE(y_hat, y):
+    return(y_hat-y) # df/dy_hat of f = cost(activation()) = BCE(sigmoid()), BCE = -(y*np.log(y_hat)+(1-y)*np.log(1-y_hat)))
+
+def d_costactivation_softmax_CE(y_hat, y):
+    return(y_hat-y) # df/dy_hat of f = cost(activation()) = CE(softmax()), CE = -sum(y*np.log(y_hat)))
 
 def nnnn_accuracy(Y_hat, Y): # compute nnnn accuracy
     a = 0
@@ -81,7 +86,7 @@ def nnnn_forward(x, w, b, nnnn_structure): # compute nnnn output
 
     return(y, z_hist, a_hist)
 
-def nnnn_grad(x, y, w, b, nnnn_structure): # compute nnnn output + weights and biases gradient matrices
+def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + weights and biases gradient matrices
     (y_hat, z_hist, a_hist) = nnnn_forward(x, w, b, nnnn_structure)
 
     delta = {}
@@ -91,11 +96,24 @@ def nnnn_grad(x, y, w, b, nnnn_structure): # compute nnnn output + weights and b
     for i in reversed(np.arange(1, len(nnnn_structure))):
         if nnnn_structure[i]['activation'] == sigmoid:
             df_activation = d_sigmoid
+
         elif nnnn_structure[i]['activation'] == relu:
             df_activation = d_relu
 
         if i == len(nnnn_structure)-1:
-            delta[i] = d_cost(y_hat, y)*df_activation(z_hist[i])
+            if nnnn_structure[i]['activation'] == softmax:
+                delta[i] = d_costactivation_softmax_CE(y_hat, y)
+
+            elif nnnn_structure[i]['activation'] == sigmoid:
+                if nnnn_cost == 'BCE':
+                    delta[i] = d_costactivation_sigmoid_BCE(y_hat, y)
+
+                elif nnnn_cost == 'MSE':
+                    delta[i] = d_cost_MSE(y_hat, y)*d_sigmoid(z_hist[i])
+
+            elif nnnn_structure[i]['activation'] == relu:
+                delta[i] = d_cost_MSE(y_hat, y)*d_relu(z_hist[i])
+
         else:
             delta[i] = np.dot(w[i+1].T, delta[i+1])*df_activation(z_hist[i])
 
@@ -104,7 +122,7 @@ def nnnn_grad(x, y, w, b, nnnn_structure): # compute nnnn output + weights and b
 
     return(y_hat, dw, db)
 
-def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure): # train nnnn with X = [nb_dimensions, nb_samples] Y = [nb_classes, nb_samples], nnnn_structure = [size_layer1, ...]
+def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None): # train nnnn with X = [nb_dimensions, nb_samples] Y = [nb_classes, nb_samples], nnnn_structure = [size_layer1, ...]
     Y_hat = np.zeros(Y.shape)
 
     accuracy_hist = np.zeros(iterations)
@@ -116,7 +134,7 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure): # train nnnn with
             x = X[:, j].reshape((-1, 1)) # because NumPy
             y = Y[:, j].reshape((-1, 1)) # because NumPy
 
-            (y_hat, dw, db) = nnnn_grad(x, y, w, b, nnnn_structure)
+            (y_hat, dw, db) = nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost)
 
             for k in np.arange(1, len(nnnn_structure)):
                 w[k] = w[k]-alpha*dw[k]
@@ -142,19 +160,3 @@ def nnnn_test(x, w, b, nnnn_structure): # compute nnnn output
     y = a
 
     return(y)
-
-def main():
-    # example
-    nnnn_structure = [
-    {'layers':2, 'activation':None}, # input layer (no activation)
-    {'layers':8, 'activation':relu},
-    {'layers':8, 'activation':relu},
-    {'layers':2, 'activation':sigmoid}, # output layer
-    ]
-
-    (w, b) = nnnn_init(nnnn_structure)
-
-    return
-
-if __name__ == '__main__':
-    main()
