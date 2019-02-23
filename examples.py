@@ -40,14 +40,15 @@ def example_digits():
         Y[C[i], i] = 1 # one-hot encode
 
     # select training data subset
-    X_train = X[:, :1000]
-    Y_train = Y[:, :1000]
+    training_samples = 1000
+    X_train = X[:, :training_samples]
+    Y_train = Y[:, :training_samples]
 
     # set up nnnn
     nnnn_structure = [
-    {'layers':64, 'activation':None},
-    {'layers':30, 'activation':nnnn.relu},
-    {'layers':10, 'activation':nnnn.softmax},
+    {'nodes':64, 'activation':None}, # 64 = X.shape[0]
+    {'nodes':30, 'activation':nnnn.relu},
+    {'nodes':10, 'activation':nnnn.softmax}, # 10 = Y.shape[0]
     ]
     nnnn_cost = 'CE'
 
@@ -65,8 +66,8 @@ def example_digits():
     plt.ylabel('Training accuracy (%)')
 
     # select testing data subset
-    X_test = X[:, 1000:]
-    Y_test = Y[:, 1000:]
+    X_test = X[:, training_samples:]
+    Y_test = Y[:, training_samples:]
 
     # test nnnn
     Y_hat = nnnn.nnnn_test(X_test, w, b, nnnn_structure)

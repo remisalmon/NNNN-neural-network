@@ -62,8 +62,8 @@ def nnnn_init(nnnn_structure): # initialize nnnn weights and biases gradient mat
     b = {}
 
     for i in np.arange(1, len(nnnn_structure)):
-        w[i] = np.random.randn(nnnn_structure[i]['layers'], nnnn_structure[i-1]['layers'])
-        b[i] = np.random.randn(nnnn_structure[i]['layers'], 1)
+        w[i] = np.random.randn(nnnn_structure[i]['nodes'], nnnn_structure[i-1]['nodes'])
+        b[i] = np.random.randn(nnnn_structure[i]['nodes'], 1)
 
     return(w, b)
 
