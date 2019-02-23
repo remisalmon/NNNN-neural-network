@@ -1,28 +1,28 @@
 # NNNN: a Nth NumPy Neural Network
 
-`nnnn.py` is a fully connected feedforward neural network with stochastic gradient descent written in Python
+`nnnn.py` is a fully connected feed-forward neural network with stochastic gradient descent written in Python
 
 ## Features
 
-* Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softax (`softmax`)
+* Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softmax (`softmax`)
 * Cost functions: Mean Square Error (`MSE`), Binary Cross-Entropy (`BCE`), Categorical Cross-Entropy (`CE`)
 * Optimization algorithm: Stochastic Gradient Descent (truly stochastic)
-* Only 143 LOC and 5 KB
-* Only requires NumPy
+* Only depends on NumPy
+* 143 LOC and 5 KB
 
 ## Usage
 
 ### Initialization
 
 Example:  
-For a 4-layers network with ReLU hidden layers, a Softmax output layer and 2-d inputs and outputs:
+For a 4-layers network with 2 ReLU hidden layers, a Softmax output layer and 2-d inputs and outputs:
 
 ```
 nnnn_structure = [
-{'layers':2, 'activation':None}, # input layer (no activation)
-{'layers':8, 'activation':relu},
-{'layers':8, 'activation':relu},
-{'layers':2, 'activation':softmax}, # output layer
+{'nodes':2, 'activation':None}, # input layer (no activation)
+{'nodes':8, 'activation':relu},
+{'nodes':8, 'activation':relu},
+{'nodes':2, 'activation':softmax}, # output layer
 ]
 
 (w, b) = nnnn_init(nnnn_structure)
