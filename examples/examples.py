@@ -55,8 +55,8 @@ def example_digits():
     (w, b) = nnnn.nnnn_init(nnnn_structure)
 
     # train nnnn
-    alpha = 0.1
-    iterations = 10
+    alpha = 0.01
+    iterations = 20
 
     (w, b, accuracy_hist) = nnnn.nnnn_train(X_train, Y_train, alpha, iterations, w, b, nnnn_structure, nnnn_cost)
 
@@ -75,11 +75,11 @@ def example_digits():
     print('test accuracy = '+str(nnnn.nnnn_accuracy(Y_hat, Y_test)))
 
     plt.figure()
-    for i in np.arange(1, 1+10):
-        plt.subplot(10, 2, 2*i-1)
+    for i in np.arange(1, 1+5):
+        plt.subplot(5, 2, 2*i-1)
         plt.imshow(digits.images[training_samples+i-1], cmap = 'gray')
         plt.axis('off')
-        plt.subplot(10, 2, 2*i)
+        plt.subplot(5, 2, 2*i)
         plt.bar(np.arange(1, 1+10), Y_hat[:, i-1].T)
         plt.xticks(np.arange(1, 1+10), ['', '', '', '', '', '', '', '', '', '', ''])
         plt.yticks([])
