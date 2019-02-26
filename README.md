@@ -66,6 +66,20 @@ Y_hat = nnnn_test(X, w, b, nnnn_structure)
 * `d` is the input data dimension, `c` is the number of classes, `n` is the number of training/testing samples
 * `y, Y` are training data and `y_hat, Y_hat` are network output data (same dimensions as `y, Y`)
 
+## Example
+
+Testing NNNN on the MNIST dataset with: 1 Sigmoid hidden layer, a Softmax output layer, a learning rate of 0.01, 20 iterations, 1000 training samples and 797 testing samples (see `examples/examples.py`):  
+Training accuracy: 95.1%  
+Testing accuracy: 87.7%
+
+Training | Testing
+---------|--------
+![examples_accuracy.png](examples/examples_accuracy.png)|![examples_plot.png](examples/examples_plot.png)
+
+With 1 ReLU hidden layer and 50 iterations:  
+Training accuracy: 100.%  
+Testing accuracy: 91.7%
+
 ## References
 
 * Backpropagation algorithm derivation in matrix form: https://sudeepraja.github.io/Neural/
