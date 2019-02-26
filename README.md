@@ -4,23 +4,21 @@
 
 ## Features
 
-* Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softmax (`softmax`)
+* Activation functions: ReLU (`relu`), Sigmoid (`sigmoid`), Softmax (`softmax`), Linear (`linear`)
 * Cost functions: Mean Square Error (`MSE`), Binary Cross-Entropy (`BCE`), Categorical Cross-Entropy (`CE`)
 * Optimization algorithm: Stochastic Gradient Descent (truly stochastic)
 * Only depends on NumPy
-* 143 LOC and 5 KB
+* Only 155 LOC/5 KB
 
 ## Usage
 
 ### Initialization
 
-Example:  
-For a 4-layers network with 2 ReLU hidden layers, a Softmax output layer and 2-d inputs and outputs:
+For a 3-layers network with 1 ReLU hidden layers, a Softmax output layer and 2-d inputs and outputs:
 
 ```
 nnnn_structure = [
 {'nodes':2, 'activation':None}, # input layer (no activation)
-{'nodes':8, 'activation':relu},
 {'nodes':8, 'activation':relu},
 {'nodes':2, 'activation':softmax}, # output layer
 ]
@@ -36,20 +34,20 @@ With input and output data `X` and `Y`, a Categorical Cross-Entropy cost functio
 nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure)
 ```
 
-#### Note
+#### Note on cost function
 
 Setting the following activation functions in the output layer automatically default to the following cost functions:  
 `sigmoid` → `BCE`  
 `softmax` → `CE`  
-`relu` → `MSE`
-
-The cost functions `BCE` and `CE` require the training output data `Y` to be encoded as one-hot vectors
+`relu, linear` → `MSE`
 
 To use the `MSE` cost function with a `sigmoid` activation function in the output layer, run:
 
 ```
 nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure, cost = 'MSE')
 ```
+
+The cost functions `BCE` and `CE` require the training output data `Y` to be encoded as one-hot vectors
 
 ### Testing
 
@@ -85,7 +83,7 @@ Testing accuracy: 91.7%
 * Backpropagation algorithm derivation in matrix form: https://sudeepraja.github.io/Neural/
 * Cross-Entropy Loss functions and derivations: https://peterroelants.github.io/posts/cross-entropy-logistic/, https://peterroelants.github.io/posts/cross-entropy-softmax/
 
-## ToDo
+## To-Do
 
 * Add regularization term
 * Implement batch/mini-batch gradient descent
