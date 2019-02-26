@@ -47,16 +47,16 @@ def example_digits():
     # set up nnnn
     nnnn_structure = [
     {'nodes':64, 'activation':None}, # 64 = X.shape[0]
-    {'nodes':30, 'activation':nnnn.relu},
+    {'nodes':30, 'activation':nnnn.sigmoid},
     {'nodes':10, 'activation':nnnn.softmax}, # 10 = Y.shape[0]
     ]
-    nnnn_cost = 'CE'
+    nnnn_cost = 'BCE'
 
     (w, b) = nnnn.nnnn_init(nnnn_structure)
 
     # train nnnn
-    alpha = 0.01
-    iterations = 100
+    alpha = 0.1
+    iterations = 10
 
     (w, b, accuracy_hist) = nnnn.nnnn_train(X_train, Y_train, alpha, iterations, w, b, nnnn_structure, nnnn_cost)
 
@@ -73,6 +73,17 @@ def example_digits():
     Y_hat = nnnn.nnnn_test(X_test, w, b, nnnn_structure)
 
     print('test accuracy = '+str(nnnn.nnnn_accuracy(Y_hat, Y_test)))
+
+    plt.figure()
+    for i in np.arange(1, 1+10):
+        plt.subplot(10, 2, 2*i-1)
+        plt.imshow(digits.images[training_samples+i-1], cmap = 'gray')
+        plt.axis('off')
+        plt.subplot(10, 2, 2*i)
+        plt.bar(np.arange(1, 1+10), Y_hat[:, i-1].T)
+        plt.xticks(np.arange(1, 1+10), ['', '', '', '', '', '', '', '', '', '', ''])
+        plt.yticks([])
+    plt.xticks(np.arange(1, 1+10), ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
 
     return
 
