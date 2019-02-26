@@ -33,6 +33,12 @@ def relu(x):
 def d_relu(x):
     return((x > 0)*1.0)
 
+def linear(x):
+    return(x)
+
+def d_linear(x):
+    return(1.0)
+
 def softmax(x):
     x = x-x.max()
     return(np.exp(x)/(sum(np.exp(x))))
@@ -101,6 +107,9 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
         elif nnnn_structure[i]['activation'] == relu:
             d_activation = d_relu
 
+        elif nnnn_structure[i]['activation'] == linear:
+            d_activation = d_linear
+
         if i == len(nnnn_structure)-1:
             if nnnn_structure[i]['activation'] == softmax:
                 delta[i] = d_costactivation_softmax_CE(y_hat, y)
@@ -114,6 +123,9 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
 
             elif nnnn_structure[i]['activation'] == relu:
                 delta[i] = d_cost_MSE(y_hat, y)*d_relu(z_hist[i])
+
+            elif nnnn_structure[i]['activation'] == linear:
+                delta[i] = d_cost_MSE(y_hat, y)*d_linear(z_hist[i])
 
         else:
             delta[i] = np.dot(w[i+1].T, delta[i+1])*d_activation(z_hist[i])
