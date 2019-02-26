@@ -52,13 +52,16 @@ def d_costactivation_sigmoid_BCE(y_hat, y):
 def d_costactivation_softmax_CE(y_hat, y):
     return(y_hat-y) # df/dy_hat of f = CE(softmax()) with CE(y_hat) = -sum(y*np.log(y_hat)))
 
-def nnnn_accuracy(Y_hat, Y): # compute nnnn accuracy
+def nnnn_accuracy(Y_hat, Y, one_hot = True): # compute nnnn accuracy
     a = 0
     n = Y.shape[1]
 
     for i in range(n):
-        if np.all((Y_hat[:, i] > 0.5)*1 == Y[:, i]):
+        if one_hot: # classification accuracy
+            if np.all((Y_hat[:, i] > 0.5)*1 == Y[:, i]):
                 a = a+1
+        else: # regression accuracy
+            a = a+(1-np.linalg.norm(Y_hat[:, i]-Y[:, i])/np.linalg.norm(Y[:, i]))
     a = a/n
 
     return(a)
@@ -140,6 +143,11 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
 
     accuracy_hist = np.zeros(iterations)
 
+    if nnnn_structure[-1]['activation'] in (softmax, sigmoid):
+        one_hot = True
+    else:
+        one_hot = False
+
     n = Y.shape[1]
 
     for i in range(iterations):
@@ -155,9 +163,9 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
 
             Y_hat[:, j] = y_hat.reshape((1, -1)) # reshape because NumPy
 
-        accuracy_hist[i] = nnnn_accuracy(Y_hat, Y)
+        accuracy_hist[i] = nnnn_accuracy(Y_hat, Y, one_hot)
 
-        print('iter '+'%03d'%(i+1)+'/'+str(iterations)+', accuracy = '+str(accuracy_hist[i]))
+        print('iteration '+'%03d'%(i+1)+'/'+str(iterations)+', accuracy = '+str(accuracy_hist[i]))
 
     return(w, b, accuracy_hist)
 
