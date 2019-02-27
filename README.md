@@ -14,7 +14,7 @@
 
 ### Initialization
 
-For a 3-layers network with 1 ReLU hidden layers, a Softmax output layer and 2-d inputs and outputs:
+For a 3-layers network with a ReLU hidden layer, a Softmax output layer and 2-d inputs and outputs:
 
 ```
 nnnn_structure = [
@@ -34,7 +34,7 @@ With input and output data `X` and `Y`, a Categorical Cross-Entropy cost functio
 nnnn_train(X, Y, alpha = 0.01, iterations = 1000, w, b, nnnn_structure)
 ```
 
-#### Note on cost function
+#### Cost function
 
 Setting the following activation functions in the output layer automatically default to the following cost functions:  
 `sigmoid` → `BCE`  
@@ -59,10 +59,11 @@ Y_hat = nnnn_test(X, w, b, nnnn_structure)
 
 ## Data Format
 
-* `x, y` are NumPy arrays of dimensions `(d, 1), (c, 1)`
-* `X, Y` are NumPy arrays of dimensions `(d, n), (c, n)`
-* `d` is the input data dimension, `c` is the number of classes, `n` is the number of training/testing samples
-* `y, Y` are training data and `y_hat, Y_hat` are network output data (same dimensions as `y, Y`)
+* `X` is a NumPy arrays of dimension `(d, n)`
+* `Y, Y_hay` are NumPy arrays of dimension `(c, n)`
+* `d` is the input data dimension (input layer dimension)
+* `c` is the number of features (output layer dimension)
+* `n` is the number of samples
 
 ## Example
 
