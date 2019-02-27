@@ -59,15 +59,15 @@ Y_hat = nnnn_test(X, w, b, nnnn_structure)
 
 ## Data Format
 
-* `X` is a NumPy arrays of dimension `(d, n)`
-* `Y, Y_hay` are NumPy arrays of dimension `(c, n)`
-* `d` is the input data dimension (input layer dimension)
-* `c` is the number of features (output layer dimension)
+* `X` is a NumPy array of dimension `(d, n)`
+* `Y, Y_hat` are NumPy arrays of dimension `(c, n)`
+* `d` is the dimension of the input data (input layer dimension)
+* `c` is the number of classes/output variables  (output layer dimension)
 * `n` is the number of samples
 
 ## Example
 
-Testing NNNN on the MNIST dataset with: 1 Sigmoid hidden layer, a Softmax output layer, a learning rate of 0.01, 20 iterations, 1000 training samples and 797 testing samples (see `examples/examples.py`):  
+Testing NNNN on the MNIST dataset with 1 Sigmoid hidden layer, a Softmax output layer, a learning rate of 0.01, 20 training iterations, 1000 training samples and 797 testing samples (see `examples/examples.py`):  
 Training accuracy: 95.1%  
 Testing accuracy: 87.7%
 
