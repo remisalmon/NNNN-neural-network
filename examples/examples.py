@@ -22,11 +22,84 @@ import nnnn
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sklearn.datasets as sk
+
+def example_fashion():
+    # load data
+    from keras.datasets import fashion_mnist
+
+    (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+
+    class_names = np.array(['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'])
+
+    # format data
+    train_images = train_images/255
+    test_images = test_images/255
+
+    X_train = np.array(train_images.reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2])).T)
+
+    X_test = np.array(test_images.reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2])).T)
+
+    Y_train = np.zeros((class_names.shape[0], train_labels.shape[0]))
+    for i in range(train_labels.shape[0]):
+        Y_train[train_labels[i], i] = 1 # one-hot encode
+
+    Y_test = np.zeros((class_names.shape[0], test_labels.shape[0]))
+    for i in range(test_labels.shape[0]):
+        Y_test[test_labels[i], i] = 1 # one-hot encode
+
+    # set-up NNNN
+    nnnn_structure = [
+    {'nodes':784, 'activation':None}, # 784 = X.shape[0]
+    {'nodes':128, 'activation':nnnn.relu},
+    {'nodes':10, 'activation':nnnn.softmax}, # 10 = class_names.shape[0]
+    ]
+    nnnn_cost = 'BCE'
+
+    (w, b) = nnnn.nnnn_init(nnnn_structure)
+
+    # train NNNN
+    alpha = 0.01
+    iterations = 5
+
+    (w, b, accuracy_hist) = nnnn.nnnn_train(X_train, Y_train, alpha, iterations, w, b, nnnn_structure, nnnn_cost)
+
+    plt.figure()
+    plt.plot(accuracy_hist*100)
+    plt.xlabel('Training iteration')
+    plt.ylabel('Training accuracy (%)')
+
+    # test NNNN
+    Y_hat = nnnn.nnnn_test(X_test, w, b, nnnn_structure)
+
+    print('test accuracy = '+str(nnnn.nnnn_accuracy(Y_hat, Y_test)))
+
+    plt.figure()
+    for i in np.arange(1, 1+5):
+        j = np.random.randint(0, X_test.shape[1])
+
+        plt.subplot(5, 3, 3*i-2)
+        plt.imshow(test_images[j, :, :], cmap = 'gray')
+        plt.grid(False)
+        plt.xticks([])
+        plt.yticks([])
+        plt.subplot(5, 3, 3*i-1)
+        plt.text(0, 0.5, class_names[np.argmax(Y_test[:, j])]+' / Prediction: '+class_names[np.argmax(Y_hat[:, j])]+' ('+str(round(np.max(Y_hat[:, j])*100))+'%)')
+        plt.grid(False)
+        plt.box(False)
+        plt.xticks([])
+        plt.yticks([])
+        plt.subplot(5, 3, 3*i)
+        plt.bar(np.arange(1, 1+len(class_names)), Y_hat[:, j].T)
+        plt.xticks(np.arange(1, 1+len(class_names)), ['', '', '', '', '', '', '', '', '', '', ''])
+        plt.yticks([])
+    plt.xticks(np.arange(1, 1+len(class_names)), ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+
+    return
 
 def example_digits():
     # load data
-    digits = sk.load_digits()
+    import sklearn.datasets as sdata
+    digits = sdata.load_digits()
 
     X = digits.data
     C = digits.target
@@ -39,12 +112,15 @@ def example_digits():
     for i in range(C.shape[0]):
         Y[C[i], i] = 1 # one-hot encode
 
-    # select training data subset
+    # select training/testing data subset
     training_samples = 1000
     X_train = X[:, :training_samples]
     Y_train = Y[:, :training_samples]
 
-    # set up nnnn
+    X_test = X[:, training_samples:]
+    Y_test = Y[:, training_samples:]
+
+    # set-up NNNN
     nnnn_structure = [
     {'nodes':64, 'activation':None}, # 64 = X.shape[0]
     {'nodes':30, 'activation':nnnn.sigmoid},
@@ -54,7 +130,7 @@ def example_digits():
 
     (w, b) = nnnn.nnnn_init(nnnn_structure)
 
-    # train nnnn
+    # train NNNN
     alpha = 0.01
     iterations = 20
 
@@ -65,22 +141,20 @@ def example_digits():
     plt.xlabel('Training iteration')
     plt.ylabel('Training accuracy (%)')
 
-    # select testing data subset
-    X_test = X[:, training_samples:]
-    Y_test = Y[:, training_samples:]
-
-    # test nnnn
+    # test NNNN
     Y_hat = nnnn.nnnn_test(X_test, w, b, nnnn_structure)
 
     print('test accuracy = '+str(nnnn.nnnn_accuracy(Y_hat, Y_test)))
 
     plt.figure()
     for i in np.arange(1, 1+5):
+        j = np.random.randint(0, X_test.shape[1])
+
         plt.subplot(5, 2, 2*i-1)
-        plt.imshow(digits.images[training_samples+i-1], cmap = 'gray')
+        plt.imshow(digits.images[training_samples+j], cmap = 'gray')
         plt.axis('off')
         plt.subplot(5, 2, 2*i)
-        plt.bar(np.arange(1, 1+10), Y_hat[:, i-1].T)
+        plt.bar(np.arange(1, 1+10), Y_hat[:, j].T)
         plt.xticks(np.arange(1, 1+10), ['', '', '', '', '', '', '', '', '', '', ''])
         plt.yticks([])
     plt.xticks(np.arange(1, 1+10), ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
