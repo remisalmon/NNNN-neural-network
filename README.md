@@ -83,6 +83,8 @@ Testing accuracy: 91.7%
 
 * Backpropagation algorithm derivation in matrix form: https://sudeepraja.github.io/Neural/
 * Cross-Entropy Loss functions and derivations: https://peterroelants.github.io/posts/cross-entropy-logistic/, https://peterroelants.github.io/posts/cross-entropy-softmax/
+* Xavier initialization: https://philipperemy.github.io/xavier-initialization/
+* Bias initialization: https://cs231n.github.io/neural-networks-2/
 
 ## To-Do
 
