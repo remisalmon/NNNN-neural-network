@@ -104,15 +104,6 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
     db = {}
 
     for i in reversed(np.arange(1, len(nnnn_structure))):
-        if nnnn_structure[i]['activation'] == sigmoid:
-            d_activation = d_sigmoid
-
-        elif nnnn_structure[i]['activation'] == relu:
-            d_activation = d_relu
-
-        elif nnnn_structure[i]['activation'] == linear:
-            d_activation = d_linear
-
         if i == len(nnnn_structure)-1:
             if nnnn_structure[i]['activation'] == softmax:
                 delta[i] = d_costactivation_softmax_CE(y_hat, y)
@@ -131,6 +122,15 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
                 delta[i] = d_cost_MSE(y_hat, y)*d_linear(z_hist[i])
 
         else:
+            if nnnn_structure[i]['activation'] == sigmoid:
+                d_activation = d_sigmoid
+
+            elif nnnn_structure[i]['activation'] == relu:
+                d_activation = d_relu
+
+            elif nnnn_structure[i]['activation'] == linear:
+                d_activation = d_linear
+
             delta[i] = np.dot(w[i+1].T, delta[i+1])*d_activation(z_hist[i])
 
         dw[i] = np.dot(delta[i], a_hist[i-1].T)
