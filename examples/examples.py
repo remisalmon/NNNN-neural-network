@@ -47,7 +47,7 @@ def example_fashion():
     for i in range(test_labels.shape[0]):
         Y_test[test_labels[i], i] = 1 # one-hot encode
 
-    # set-up NNNN
+    # setup NNNN
     nnnn_structure = [
     {'nodes':784, 'activation':None}, # 784 = X.shape[0]
     {'nodes':128, 'activation':nnnn.relu},
@@ -120,7 +120,7 @@ def example_digits():
     X_test = X[:, training_samples:]
     Y_test = Y[:, training_samples:]
 
-    # set-up NNNN
+    # setup NNNN
     nnnn_structure = [
     {'nodes':64, 'activation':None}, # 64 = X.shape[0]
     {'nodes':30, 'activation':nnnn.sigmoid},
@@ -161,8 +161,68 @@ def example_digits():
 
     return
 
+def example_housing():
+    # load data
+    import sklearn.datasets as sdata
+    boston_housing = sdata.load_boston()
+
+    X = boston_housing.data
+    Y = boston_housing.target
+
+    # format data
+    X = X = (X-X.min(0))/(X.max(0)-X.min(0)) # normalize
+
+    X = X.T
+    Y = Y.reshape((1, -1))
+
+    # select training/testing data subset
+    training_samples = 406
+    X_train = X[:, :training_samples]
+    Y_train = Y[:, :training_samples]
+
+    X_test = X[:, training_samples:]
+    Y_test = Y[:, training_samples:]
+
+    # setup NNNN
+    nnnn_structure = [
+    {'nodes':13, 'activation':None}, # 13 = X.shape[0]
+    {'nodes':20, 'activation':nnnn.relu},
+    {'nodes':1, 'activation':nnnn.linear} # 1 = Y.shape[0]
+    ]
+    nnnn_cost = 'MSE'
+
+    (w, b) = nnnn.nnnn_init(nnnn_structure)
+
+    # train NNNN
+    alpha = 0.001
+    iterations = 100
+
+    (w, b, accuracy_hist) = nnnn.nnnn_train(X_train, Y_train, alpha, iterations, w, b, nnnn_structure, nnnn_cost)
+
+    plt.figure()
+    plt.plot(accuracy_hist*100)
+    plt.xlabel('Training iteration')
+    plt.ylabel('Training accuracy (%)')
+    plt.ylim((0, 100))
+
+    # test NNNN
+    Y_hat = nnnn.nnnn_test(X_test, w, b, nnnn_structure)
+
+    print('test accuracy = '+str(nnnn.nnnn_accuracy(Y_hat, Y_test, one_hot = False)))
+
+    print('test MSE = '+str(((Y_hat-Y_test)**2).mean()))
+
+    plt.figure()
+    plt.scatter(Y_test, Y_hat)
+    plt.xlabel('Testing')
+    plt.ylabel('Prediction')
+
+    return
+
 def main():
     example_digits()
+    #example_fashion()
+    #example_housing()
 
 if __name__ == '__main__':
     main()
