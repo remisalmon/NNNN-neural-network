@@ -57,7 +57,7 @@ With input data `X`:
 Y_hat = nnnn_test(X, w, b, nnnn_structure)
 ```
 
-## Data Format
+### Data Formatting
 
 * `X` is a NumPy array of dimension `(d, n)`
 * `Y, Y_hat` are NumPy arrays of dimension `(c, n)`
@@ -67,7 +67,7 @@ Y_hat = nnnn_test(X, w, b, nnnn_structure)
 
 ## Example
 
-Testing NNNN on the MNIST dataset with 1 Sigmoid hidden layer, a Softmax output layer, a learning rate of 0.01, 20 training iterations, 1000 training samples and 797 testing samples (see `examples/examples.py`):  
+Testing NNNN on the MNIST digits dataset with 1 Sigmoid hidden layer, a Softmax output layer, a learning rate of 0.01, 20 training iterations, 1000 training samples and 797 testing samples (see `examples/examples.py`):  
 Training accuracy: 95.1%  
 Testing accuracy: 87.7%
 
@@ -78,6 +78,13 @@ Training | Testing
 With 1 ReLU hidden layer and 50 iterations:  
 Training accuracy: 100.%  
 Testing accuracy: 91.7%
+
+### More Examples
+
+Check `examples/nnnn_examples.py` for more examples:
+* Classification on the MNIST digits dataset (cf. above, requires [Scikit-Learn](https://scikit-learn.org/))
+* Classification on the MNIST fashion dataset (requires [Keras](https://keras.io/))
+* Regression on the Boston Housing dataset (requires [Scikit-Learn](https://scikit-learn.org/))
 
 ## References
 
