@@ -32,12 +32,12 @@ def example_fashion():
     class_names = np.array(['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'])
 
     # format data
-    train_images = train_images/255
-    test_images = test_images/255
+    train_images = train_images/255 # normalize
+    test_images = test_images/255 # normalize
 
-    X_train = np.array(train_images.reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2])).T)
+    X_train = train_images.reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2])).T
 
-    X_test = np.array(test_images.reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2])).T)
+    X_test = test_images.reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2])).T
 
     Y_train = np.zeros((class_names.shape[0], train_labels.shape[0]))
     for i in range(train_labels.shape[0]):
@@ -106,8 +106,8 @@ def example_digits():
 
     # format data
     X = (X-X.min())/(X.max()-X.min()) # normalize
-    X = X.T
 
+    X = X.T
     Y = np.zeros((C.max()+1, C.shape[0]))
     for i in range(C.shape[0]):
         Y[C[i], i] = 1 # one-hot encode
@@ -186,7 +186,8 @@ def example_housing():
     # setup NNNN
     nnnn_structure = [
     {'nodes':13, 'activation':None}, # 13 = X.shape[0]
-    {'nodes':20, 'activation':nnnn.relu},
+    {'nodes':10, 'activation':nnnn.relu},
+    {'nodes':10, 'activation':nnnn.relu},
     {'nodes':1, 'activation':nnnn.linear} # 1 = Y.shape[0]
     ]
     nnnn_cost = 'MSE'
@@ -195,7 +196,7 @@ def example_housing():
 
     # train NNNN
     alpha = 0.001
-    iterations = 100
+    iterations = 300
 
     (w, b, accuracy_hist) = nnnn.nnnn_train(X_train, Y_train, alpha, iterations, w, b, nnnn_structure, nnnn_cost)
 
