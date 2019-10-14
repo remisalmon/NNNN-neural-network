@@ -53,7 +53,7 @@ def example_fashion():
     {'nodes':128, 'activation':nnnn.relu},
     {'nodes':10, 'activation':nnnn.softmax}, # 10 = class_names.shape[0]
     ]
-    nnnn_cost = 'BCE'
+    nnnn_cost = 'CE'
 
     (w, b) = nnnn.nnnn_init(nnnn_structure)
 
@@ -126,7 +126,7 @@ def example_digits():
     {'nodes':30, 'activation':nnnn.sigmoid},
     {'nodes':10, 'activation':nnnn.softmax}, # 10 = Y.shape[0]
     ]
-    nnnn_cost = 'BCE'
+    nnnn_cost = 'CE'
 
     (w, b) = nnnn.nnnn_init(nnnn_structure)
 
