@@ -53,18 +53,20 @@ def d_costactivation_CE_softmax(y_hat, y):
     return(y_hat-y) # df/dy_hat of f = CE(softmax()) with CE(y_hat) = -sum(y*np.log(y_hat)))
 
 def nnnn_accuracy(Y_hat, Y, one_hot = True): # compute nnnn accuracy
-    a = 0
+    accuracy = 0
+
     n = Y.shape[1]
 
     for i in range(n):
         if one_hot: # classification accuracy
             if np.all((Y_hat[:, i] > 0.5)*1 == Y[:, i]):
-                a = a+1
+                accuracy += 1
         else: # regression accuracy
-            a = a+(1-np.linalg.norm(Y_hat[:, i]-Y[:, i])/np.linalg.norm(Y[:, i]))
-    a = a/n
+            accuracy += 1-np.linalg.norm(Y_hat[:, i]-Y[:, i])/np.linalg.norm(Y[:, i])
 
-    return(a)
+    accuracy = accuracy/n
+
+    return(accuracy)
 
 def nnnn_init(nnnn_structure): # initialize nnnn weights and biases gradient matrices
     w = {}
@@ -92,12 +94,10 @@ def nnnn_forward(x, w, b, nnnn_structure): # compute nnnn output
         z_hist[i] = z
         a_hist[i] = a
 
-    y = a
-
-    return(y, z_hist, a_hist)
+    return(a, z_hist, a_hist)
 
 def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + weights and biases gradient matrices
-    (y_hat, z_hist, a_hist) = nnnn_forward(x, w, b, nnnn_structure)
+    y_hat, z_hist, a_hist = nnnn_forward(x, w, b, nnnn_structure)
 
     dw = {}
     db = {}
@@ -151,13 +151,13 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
             x = X[:, j].reshape((-1, 1)) # reshape because NumPy
             y = Y[:, j].reshape((-1, 1)) # reshape because NumPy
 
-            (y_hat, dw, db) = nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost)
+            y_hat, dw, db = nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost)
+
+            Y_hat[:, j] = y_hat.reshape((1, -1)) # reshape because NumPy
 
             for k in np.arange(1, len(nnnn_structure)):
                 w[k] = w[k]-alpha*dw[k]
                 b[k] = b[k]-alpha*db[k]
-
-            Y_hat[:, j] = y_hat.reshape((1, -1)) # reshape because NumPy
 
         accuracy_hist[i] = nnnn_accuracy(Y_hat, Y, one_hot)
 
@@ -174,6 +174,4 @@ def nnnn_test(x, w, b, nnnn_structure): # compute nnnn output
         z = np.dot(w[i], a)+b[i]
         a = activation(z)
 
-    y = a
-
-    return(y)
+    return(a)
