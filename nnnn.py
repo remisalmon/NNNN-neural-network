@@ -41,15 +41,15 @@ def d_linear(x):
 
 def softmax(x):
     x = x-x.max()
-    return(np.exp(x)/(sum(np.exp(x))))
+    return(np.exp(x)/(np.sum(np.exp(x), axis = 0)))
 
 def d_cost_MSE(y_hat, y):
     return(y_hat-y) # df/dy_hat of f = MSE(y_hat) = (1/2)*np.power(y_hat-y, 2)
 
-def d_costactivation_sigmoid_BCE(y_hat, y):
+def d_costactivation_BCE_sigmoid(y_hat, y):
     return(y_hat-y) # df/dy_hat of f = BCE(sigmoid()) with BCE(y_hat) = -(y*np.log(y_hat)+(1-y)*np.log(1-y_hat)))
 
-def d_costactivation_softmax_CE(y_hat, y):
+def d_costactivation_CE_softmax(y_hat, y):
     return(y_hat-y) # df/dy_hat of f = CE(softmax()) with CE(y_hat) = -sum(y*np.log(y_hat)))
 
 def nnnn_accuracy(Y_hat, Y, one_hot = True): # compute nnnn accuracy
@@ -99,27 +99,26 @@ def nnnn_forward(x, w, b, nnnn_structure): # compute nnnn output
 def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + weights and biases gradient matrices
     (y_hat, z_hist, a_hist) = nnnn_forward(x, w, b, nnnn_structure)
 
-    delta = {}
     dw = {}
     db = {}
 
     for i in reversed(np.arange(1, len(nnnn_structure))):
         if i == len(nnnn_structure)-1:
             if nnnn_structure[i]['activation'] == softmax:
-                delta[i] = d_costactivation_softmax_CE(y_hat, y)
+                delta = d_costactivation_CE_softmax(y_hat, y)
 
             elif nnnn_structure[i]['activation'] == sigmoid:
                 if nnnn_cost == 'BCE':
-                    delta[i] = d_costactivation_sigmoid_BCE(y_hat, y)
+                    delta = d_costactivation_BCE_sigmoid(y_hat, y)
 
                 elif nnnn_cost == 'MSE':
-                    delta[i] = d_cost_MSE(y_hat, y)*d_sigmoid(z_hist[i])
+                    delta = d_cost_MSE(y_hat, y)*d_sigmoid(z_hist[i])
 
             elif nnnn_structure[i]['activation'] == relu:
-                delta[i] = d_cost_MSE(y_hat, y)*d_relu(z_hist[i])
+                delta = d_cost_MSE(y_hat, y)*d_relu(z_hist[i])
 
             elif nnnn_structure[i]['activation'] == linear:
-                delta[i] = d_cost_MSE(y_hat, y)*d_linear(z_hist[i])
+                delta = d_cost_MSE(y_hat, y)*d_linear(z_hist[i])
 
         else:
             if nnnn_structure[i]['activation'] == sigmoid:
@@ -131,10 +130,10 @@ def nnnn_grad(x, y, w, b, nnnn_structure, nnnn_cost): # compute nnnn output + we
             elif nnnn_structure[i]['activation'] == linear:
                 d_activation = d_linear
 
-            delta[i] = np.dot(w[i+1].T, delta[i+1])*d_activation(z_hist[i])
+            delta = np.dot(w[i+1].T, delta)*d_activation(z_hist[i])
 
-        dw[i] = np.dot(delta[i], a_hist[i-1].T)
-        db[i] = delta[i]
+        dw[i] = np.dot(delta, a_hist[i-1].T)
+        db[i] = delta
 
     return(y_hat, dw, db)
 
@@ -143,10 +142,7 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
 
     accuracy_hist = np.zeros(iterations)
 
-    if nnnn_structure[-1]['activation'] in (softmax, sigmoid):
-        one_hot = True
-    else:
-        one_hot = False
+    one_hot = True if nnnn_structure[-1]['activation'] in [softmax, sigmoid] else False
 
     n = Y.shape[1]
 
@@ -165,7 +161,7 @@ def nnnn_train(X, Y, alpha, iterations, w, b, nnnn_structure, nnnn_cost = None):
 
         accuracy_hist[i] = nnnn_accuracy(Y_hat, Y, one_hot)
 
-        print('iteration '+'%03d'%(i+1)+'/'+str(iterations)+', accuracy = '+str(accuracy_hist[i]))
+        print('iteration '+str(i+1)+'/'+str(iterations)+', accuracy = '+str(accuracy_hist[i]))
 
     return(w, b, accuracy_hist)
 
