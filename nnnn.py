@@ -79,7 +79,8 @@ class NNNN:
         X.shape = (n_samples, n_dimensions)
         Y.shape = (n_samples, n_dimensions) or (n_samples,)
 
-        if hist is True, returns output at each layer as a list
+        if hist is True, returns output at each layer as a list Y_hist
+        if hist is True, Y_hist[i].shape = (n_dimensions, n_samples)
         """
 
         Y = X.T
@@ -110,7 +111,7 @@ class NNNN:
 
         for i in range(self.d):
             if i == 0:
-                delta = y_hist[-1]-t # d_loss/d_y, loss = 0.5*square error (regression) or cross-entropy(logistic(y)|softmax(y)) (classification)
+                delta = y_hist[-1]-t # d_loss/d_y, loss = 0.5*squared error(y) (regression) or cross-entropy(logistic(y)|softmax(y)) (classification)
 
             else:
                 delta = (self.W[-1-i+1].T@delta)*d_relu(self.W[-1-i]@y_hist[-1-i-1])
@@ -129,7 +130,7 @@ class NNNN:
             loss = -T*np.log(Y)-(1-T)*np.log(1-Y) if self.bc else -np.sum(T*np.log(Y), axis = 1) # cross-entropy (classification)
 
         else:
-            loss = 0.5*np.sum((Y-T)**2, axis = 1) # square error (regression)
+            loss = 0.5*np.sum((Y-T)**2, axis = 1) # squared error (regression)
 
         loss = np.mean(loss, axis = 0)
 

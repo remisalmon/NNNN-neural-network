@@ -23,16 +23,18 @@ network.train(data_train, target, rate = 0.001, alpha = 0.0001, iterations = 100
 prediction = network.predict(data_test)
 ```
 
+(or better, use `sklearn.neural_network.MLPClassifier` or `sklearn.neural_network.MLPRegressor`)
+
 ### Initialization
 
 ```python
 network = NNNN(layers = [64, 16, 10], regression = False)
 ```
 
-* `layers: list[float]` is the network structure
-* `layers[0] = n_dimensions` is the input dimension
-* `layers[-1] = n_features` is the output dimension
-* `regression: bool` optimize the network for regression if True, classification if False
+* `layers` is the network structure as a list of int with
+  * `layers[0] = n_dimensions` the input dimension
+  * `layers[-1] = n_features` the output dimension
+* `regression` optimizes the network for regression (`False`) or classification (`True`)
 
 ### Training
 
@@ -40,8 +42,8 @@ network = NNNN(layers = [64, 16, 10], regression = False)
 network.train(data_train, target, rate = 0.001, alpha = 0.0001, iterations = 100)
 ```
 
-* `data_train.shape = (n_samples, n_dimensions)` is the input data
-* `target.shape = (n_samples, n_dimensions) or (n_samples,)` is the output target
+* `data_train` is the input data with `data_train.shape = (n_samples, n_dimensions)`
+* `target` is the output target with `target.shape = (n_samples, n_features) or (n_samples,)`
 * `rate` is the training rate
 * `alpha` is the regularization factor
 * `iteration` is the number of training iterations
@@ -52,13 +54,18 @@ network.train(data_train, target, rate = 0.001, alpha = 0.0001, iterations = 100
 prediction = network.predict(data_test)
 ```
 
-* `data_test.shape = (n_samples, n_dimensions)` is the input data
-* `prediction.shape = (n_samples, n_dimensions) or (n_samples,)` is the output prediction
+* `data_test` is the input data with `data_test.shape = data_train.shape`
+* `prediction` is the output prediction with `prediction.shape = target.shape`
 
 ## Example
 
 MNIST database with a 3 layers classification network, 1617 training samples and 180 testing samples
 (see `examples/nnnn_example.py`)
+
+```
+training accuracy = 99%
+testing accuracy = 93%
+```
 
 Training|Testing
 --------|-------
@@ -74,8 +81,8 @@ Activation functions:
 
 Optimization algorithm:
 * Stochastic gradient descent with regularization on the network weights
-* Mean squared error loss function for regression networks
-* Mean cross-entropy loss function for classification networks
+* Mean squared error loss function for regression
+* Mean cross-entropy loss function for classification
 
 ## Requirements
 
