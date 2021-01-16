@@ -13,13 +13,19 @@ ALPHA = 0.0001
 
 REGRESSION = False
 
+# functions
+def nnnnormalize(x):
+    """Normalize x to [-1, 1]"""
+
+    return -1.0+2.0*(x-x.min())/(x.max()-x.min())
+
 # main
 digits = load_digits()
 
 X = digits.data
 T = digits.target
 
-X = -1.0+2.0*(X-X.min())/(X.max()-X.min()) # normalize to [-1, 1]
+X = nnnnormalize(X)
 
 n_train = int(len(X)*TRAIN_TEST_RATIO)
 
