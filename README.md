@@ -5,8 +5,8 @@
 ## Features
 
 * Supports classification and regression
-* Weights less than 200 LOC
 * Depends on `numpy` only
+* Weights < 200 LOC
 
 ## Usage
 
@@ -32,7 +32,7 @@ network = NNNN(layers = [64, 16, 10], regression = False)
 * `layers: list[float]` is the network structure
 * `layers[0] = n_dimensions` is the input dimension
 * `layers[-1] = n_features` is the output dimension
-* `regression: bool` optimizes the network for regression if True, or classification if False (default)
+* `regression: bool` optimize the network for regression if True, classification if False
 
 ### Training
 
@@ -66,13 +66,16 @@ Training|Testing
 
 ## Implementation
 
-NNNN uses the following activation functions:
-* ReLu on the hidden layers
-* No activation function on the output layer for regression networks
-* Logistic on the output layer for binary classification networks
-* Softmax on the output layer for mulitclass classification networks
+Activation functions:
+* ReLU on the hidden layers
+* No activation function on the output layer for regression
+* Logistic on the output layer for binary classification
+* Softmax on the output layer for multiclass classification
 
-NNNN uses a stochastic gradient descent with regularization on the network weights
+Optimization algorithm:
+* Stochastic gradient descent with regularization on the network weights
+* Mean squared error loss function for regression networks
+* Mean cross-entropy loss function for classification networks
 
 ## Requirements
 
