@@ -18,7 +18,7 @@ data_test = ...
 
 network = NNNN(layers = [64, 16, 10], regression = False)
 
-network.train(data_train, target, rate = 0.001, alpha = 0.0001, iterations = 100)
+network.train(data_train, target, iterations = 100, rate = 0.001, alpha = 0.0001)
 
 prediction = network.predict(data_test)
 ```
@@ -39,14 +39,14 @@ network = NNNN(layers = [64, 16, 10], regression = False)
 ### Training
 
 ```python
-network.train(data_train, target, rate = 0.001, alpha = 0.0001, iterations = 100)
+network.train(data_train, target, iterations = 100, rate = 0.001, alpha = 0.0001)
 ```
 
 * `data_train` is the input data with `data_train.shape = (n_samples, n_dimensions)`
 * `target` is the output target with `target.shape = (n_samples, n_features) or (n_samples,)`
-* `rate` is the training rate
-* `alpha` is the regularization factor
-* `iteration` is the number of training iterations
+* `iteration` is the number of gradient descent runs
+* `rate` is the training rate (default: 0.001)
+* `alpha` is the regularization factor (default: 0.0001)
 
 ### Testing
 

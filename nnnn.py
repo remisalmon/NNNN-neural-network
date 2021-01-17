@@ -99,9 +99,7 @@ class NNNN:
 
         Y_hist.append(Y)
 
-        Y = Y_hist if hist else Y.T.squeeze()
-
-        return Y
+        return Y_hist if hist else Y.T.squeeze()
 
     def _grad(self, x, t):
         y_hist = self.predict(x.T, hist = True)
@@ -136,16 +134,16 @@ class NNNN:
 
         return loss
 
-    def train(self, X, T, rate, alpha, iterations):
+    def train(self, X, T, iterations, rate = 0.001, alpha = 0.0001):
         """
         Train network with input X and target output T, return loss function history
 
         X.shape = (n_samples, n_dimensions)
         T.shape = (n_samples, n_dimensions) or (n_samples,)
 
-        rate is the learning rate
-        alpha is the regularization factor
-        iterations is the number of stochastic gradient descent used
+        iterations is the number of stochastic gradient descent runs
+        rate is the learning rate (default: 0.001)
+        alpha is the regularization factor (default: 0.0001)
         """
 
         if T.ndim == 1:
