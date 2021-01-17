@@ -44,9 +44,9 @@ network.train(data_train, target, iterations = 100, rate = 0.001, alpha = 0.0001
 
 * `data_train` is the input data with `data_train.shape = (n_samples, n_dimensions)`
 * `target` is the output target with `target.shape = (n_samples, n_features) or (n_samples,)`
-* `iteration` is the number of gradient descent runs
-* `rate` is the training rate (default: 0.001)
-* `alpha` is the regularization factor (default: 0.0001)
+* `iterations` is the number of gradient descent runs
+* `rate` is the training rate (default: `0.001`)
+* `alpha` is the regularization factor (default: `0.0001`)
 
 ### Testing
 

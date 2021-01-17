@@ -8,8 +8,6 @@ from sklearn.datasets import load_digits
 # globals
 TRAIN_TEST_RATIO = 0.5
 ITERATIONS = 100
-RATE = 0.001
-ALPHA = 0.0001
 
 # functions
 def nnnnormalize(x):
@@ -38,7 +36,7 @@ T_train_encoded[np.arange(n_train), T_train] = 1.0
 
 network = NNNN(layers = [64, 16, 10], regression = False)
 
-loss_hist = network.train(X_train, T_train_encoded, RATE, ALPHA, ITERATIONS)
+loss_hist = network.train(X_train, T_train_encoded, ITERATIONS)
 
 fig, ax = plt.subplots()
 ax.plot(loss_hist)
@@ -52,7 +50,7 @@ Y_test = network.predict(X_test)
 Y_test_decoded = np.argmax(Y_test, axis = 1)
 
 print('training accuracy = {}%'.format(int(100*sum(Y_train_decoded == T_train)/len(T_train))))
-print('prediction accuracy = {}%'.format(int(100*sum(Y_test_decoded == T_test)/len(T_test))))
+print('testing accuracy = {}%'.format(int(100*sum(Y_test_decoded == T_test)/len(T_test))))
 
 fig, ax = plt.subplots(10, 2)
 for i in range(len(ax)):
